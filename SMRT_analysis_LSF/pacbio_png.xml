@@ -1,0 +1,21 @@
+<tool id="pacbio_pipeline_test_png" name="pacbio_png">
+     
+      <description>Running Pacbio Pipeline </description>
+      <command>
+           python /seq/regev_genome_portal/SOFTWARE/galaxy/tools/SMRT_analysis_LSF/launch_png.py
+           --out_path "$output_directory"
+           --junctions_rarefaction "$junctions_rarefaction"
+           --loci_rarefaction "$loci_rarefaction"
+      </command> 
+      <inputs>
+          <param name= "output_directory" type="text" label="Output directory name:"/>
+      </inputs> 
+      <outputs>
+          <data format="png" name="junctions_rarefaction" label="junctions_rarefaction"/>
+          <data format="png" name="loci_rarefaction" label="loci_rarefaction"/>
+          <!--<data format="text" name="log_file" label="log_file" />-->
+      </outputs>
+      <stdio>
+          <exit_code range="1:"  level="fatal" description="Error returned from pipeline" />
+      </stdio> 
+</tool>      

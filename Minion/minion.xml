@@ -1,0 +1,36 @@
+<tool id="minion_pipeline_test" name="minion_pipeline">
+     
+      <description>Running minion Pipeline </description>
+          <requirements>
+               <requirement type="set_environment">MINION_DIR</requirement>
+               <requirement type="package"></requirement>
+          </requirements>
+
+      <command>
+           python \$MINION_DIR/run_minion.py 
+           --organism $choose_organism
+           --sample $sample_directory
+           --summary $summary
+           ##--pipe_log $pipe_log
+           ##--error_log $error_log
+           ##--out_log $out_log
+           --outputdir $output_directory >> $log_file
+      </command> 
+      <inputs>
+           <param name="choose_organism" type="select" label="Organism:">
+                  <option value="human">Human</option>
+                  <option value="mouse">Mouse</option>
+           </param> 
+           <param name="sample_directory" type="text" label="Sample Directory:"/>
+           <param name="output_directory" type="text" label="Output Directory:"/>      
+      </inputs> 
+      <outputs>
+          <data format="text" name="summary" label="Summary" />
+          <!--<data format="text" name="error_log" label="Error Log"/>
+          <data format="text" name="pipe_log" label="Pipe Log"/>-->
+          <data format="text" name="log_file" label="Log File"/>
+      </outputs>
+      <stdio>
+          <exit_code range="1:"  level="fatal" description="Error returned from pipeline" />
+      </stdio> 
+</tool>      

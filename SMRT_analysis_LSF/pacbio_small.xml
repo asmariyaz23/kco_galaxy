@@ -1,0 +1,26 @@
+<tool id="pacbio_pipeline_test1" name="pacbio_pipeline1">
+     
+      <description>Running Pacbio Pipeline </description>
+      <command>
+           sh /seq/regev_genome_portal/SOFTWARE/galaxy/tools/SMRT_analysis_LSF/run_pacbio_small.sh 
+           $sample_filepath  
+           $libraryname
+           "$lib_summary"
+           $output_directory 
+           >> $log_file
+      </command> 
+      <inputs>
+          <param name= "sample_filepath" type="text" value="samples_path.txt" label="Sample File:"/>
+          <param name= "libraryname" type="text" value="library_name" label="Library Name:"/>
+          <param name= "output_directory" type="text" label="Output directory name:"/>
+      </inputs> 
+      <outputs>
+          <!--<data format="png" name="junctions_rarefaction" label="junctions_rarefaction" from_work_dir="junctions_rarefaction.png"/>-->
+          <!--<data format="png" name="loci_rarefaction" label="loci_rarefaction" from_work_dir="loci_rarefaction.png"/>-->
+          <data format="text" name="lib_summary" label="lib_summary"/>
+          <data format="text" name="log_file" label="log_file" />
+      </outputs>
+      <stdio>
+          <exit_code range="1:"  level="fatal" description="Error returned from pipeline" />
+      </stdio> 
+</tool>      

@@ -1,0 +1,134 @@
+<tool id="rnaseq_pipeline_test" name="rnaseq_pipeline">
+
+    <description>Running RNASEQ Pipeline</description>
+    <requirements>
+       <requirement type="set_environment">RNASEQ_DIR</requirement>
+       <requirement type="package"></requirement>
+    </requirements>
+    <command>
+     #if str($sample_file) != "":
+         python \$RNASEQ_DIR/make_config.py -s "$sample_file" 
+     #end if
+
+     #if str($genome_annotation) != "":
+         -n "$genome_annotation"
+     #end if
+
+     #if str($trimmomatic) == "yestrimmomatic":
+         -t 
+     #end if
+     
+     #if str($tophat) == "yestophat":             
+         -o
+     #end if
+
+     #if str($cufflinks) == "yescufflinks":
+         -c 
+     #end if
+
+     #if str($cufflinksannotation) == "yescufflinksannotation":
+         -a
+     #end if        
+     
+     #if str($rnaseqc) == "yesrnaseqc":
+         -q
+     #end if
+
+     #if str($rrnaquantitation) == "yesrrnaquantitation":
+         -r
+     #end if
+
+     #if str($rsem) == "yesrsem":
+         -m
+     #end if
+
+     ##if $threads > 1:
+         ##-e "$threads"
+     ##end if        
+
+     ##if $max_process > 1:
+         ##-j "$max_process"
+     ##end if
+     
+     -p "$out_file1"
+
+     #if $output_directory:
+         "$output_directory"        
+     #end if
+
+    </command>
+
+    <inputs>
+
+
+      <param name= "sample_file" type="data" value="samples.txt" format="tabular" label="Sample File:"/>
+
+      <param name= "genome_annotation" type="select" label="Choose Genome Annotation:">
+
+             <option value="/seq/regev_genome_portal/RESOURCES/candida/C_albicans_SC5314_version_A21-s02-m01-r01/Config/C_albicans_SC5314_extend100.config">C_albicans_SC5314_version_A21-s02-m01-r01[candida]</option>
+             <option value="/seq/regev_genome_portal/RESOURCES/human/Hg19/Config/hg19_ucsc_genomeStudio_genes.config">hg19_ucsc_genomeStudio_genes[Hg19]</option>
+             <option value="/seq/regev_genome_portal/RESOURCES/human/Hg19/Config/Gencode_v19.config">Gencode_v19[Hg19]</option>
+             <option value="/seq/regev_genome_portal/RESOURCES/human/Hg19/Config/Hg19_Gencode.config">Gencode_v19[DEPRECATED-Hg19]</option>
+             <option value="/seq/regev_genome_portal/RESOURCES/mouse/mm9/Config/mm9_ucsc_genomeStudio_genes.config">mm9_ucsc_genomeStudio_genes[mm9-mouse]</option>
+             <option value="/seq/regev_genome_portal/RESOURCES/mouse/mm10/Config/mm10_ucsc_genomestudio_genes.config">mm10_ucsc_genomeStudio_genes[mm10-mouse]</option>
+             <option value="/seq/regev_genome_portal/RESOURCES/mouse/mm10_ensembl/Config/mm10_ensembl.config">mm10_ensembl[mm10-mouse]</option>
+             <option value="/seq/regev_genome_portal/RESOURCES/rat/rn5/Config/rn5_annot.config">rn5_annot[rat-Rn5]</option>
+             <option value="/seq/regev_genome_portal/RESOURCES/Sparadoxus/Config/Spar_annot.config">Spar_annot[S. paradoxus- no UTR extension]</option>
+             <option value="/seq/regev_genome_portal/RESOURCES/Sparadoxus/Config/Spar_annot_extendUTR100.config">Spar_annot_extendUTR100[100 base extension to include UTRs]</option>
+             <option value="/seq/regev_genome_portal/RESOURCES/Scerevisiae/Config/Scerevisiae.annotation.config">Yeast (S. cerevisiae)[no UTR extension]</option>
+             <option value="/seq/regev_genome_portal/RESOURCES/Scerevisiae/Config/Scerevisiae.annotation.ext_utr_100.config">100 base extension to include UTRs [100 base extension to include UTRs]</option>
+      </param>
+
+      <param name= "trimmomatic" type="select" label="Trimmomatic" display="checkboxes" multiple="true">
+             <option value="yestrimmomatic" selected="false">TRUE</option>
+      </param>
+
+      <!--<conditional name="turn_on_cufflinks">-->
+                  <param name= "tophat" type="select" label="TopHat" display="checkboxes" multiple="true">
+                         <option value="yestophat" selected="true">TRUE</option>
+                  </param>
+     
+                         <!--<when value = "yestophat">-->
+                               <!--<conditional name="turn_on_cufflinks_annotation">-->
+                                            <param name= "cufflinks" type="select" label="Cufflinks" display="checkboxes" multiple="true">
+                                                   <option value="yescufflinks" selected="true">TRUE</option>
+                                            </param>
+                                                   <!--<when value="yescufflinks">-->
+                                                         <param name= "cufflinksannotation" type="select" label="Cufflinks Annotation" display="checkboxes" multiple="true">
+                                                                <option value="yescufflinksannotation">TRUE</option>
+                                                         </param> 
+                                                   <!--</when>-->
+                               <!--</conditional>-->
+                               <param name= "rnaseqc" type="select" label="RNASeq-QC" display="checkboxes" multiple="true">
+                                      <option value="yesrnaseqc">TRUE</option>
+                               </param>       
+                         <!--</when>-->
+      <!--</conditional>-->
+
+      <param name= "rrnaquantitation" type="select" label="rRNA Quantitation" display="checkboxes" multiple="True">
+             <option value="yesrrnaquantitation">TRUE</option>
+      </param>
+
+      <param name= "rsem" type="select" label="RSEM" display="checkboxes" multiple="True">
+             <option value="yesrsem">TRUE</option>
+      </param>
+      
+      <!--<param name= "threads" type="integer" value="4" label="No. of threads:"/>
+
+      <param name= "max_process" type="integer" value="25" label="Choose maximum no. of processes to run concurrently:"/>-->
+
+      <param name= "output_directory" type="text" label="Output directory name (will be found under /broad/hptmp/bankapur/galaxy_working):"/>
+
+    </inputs>
+
+    <outputs>
+           <data format="text" name="out_file1" />
+    </outputs>
+
+    <stdio>
+          <exit_code range="2"   level="fatal"   description="Out of Memory" />
+          <exit_code range="3:5" level="warning" description="Low disk space" />
+          <exit_code range="6:"  level="fatal"   description="Bad input dataset" />
+          <exit_code range="99"  level="fatal"   description="Bad input dataset" />
+    </stdio>
+</tool>
